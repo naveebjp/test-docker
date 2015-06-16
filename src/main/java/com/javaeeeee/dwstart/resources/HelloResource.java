@@ -24,12 +24,11 @@
 package com.javaeeeee.dwstart.resources;
 
 import com.google.common.base.Optional;
+import com.javaeeeee.dwstart.core.CalculateOrderRequest;
+import com.javaeeeee.dwstart.core.CalculateOrderResponse;
 import com.javaeeeee.dwstart.core.Greeting;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
+
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 
 /**
@@ -119,5 +118,38 @@ public class HelloResource {
     public Greeting getJSONGreetingContentNegotiation() {
         return new Greeting("Hello world!");
     }
+    
+   
+    @POST
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    public CalculateOrderResponse calculateOrder(CalculateOrderRequest calculateOrderRequest) {
 
+    	CalculateOrderResponse calculateOrderResponse = new CalculateOrderResponse();
+    	int orderQuantity = 0;
+    	
+    	if (null != calculateOrderRequest ) {
+    		
+    		orderQuantity =  calculateOrderRequest.getQuantity();
+    		
+    	
+    		if (orderQuantity <= 100){
+    			calculateOrderResponse.setOrderCode("ORDUS20");
+    			calculateOrderResponse.setOrderDesc("Order for the Segment Pass with $20");
+    			calculateOrderResponse.setOrderId(calculateOrderRequest.getOrderId());
+    			calculateOrderResponse.setPromoCode("YUPROMO20");
+    			calculateOrderResponse.setTotalAmount(orderQuantity * 20);
+    		}
+    		
+    		if (orderQuantity > 100){
+    			calculateOrderResponse.setOrderCode("ORDUS10");
+    			calculateOrderResponse.setOrderDesc("Order for the Segment Pass with $10");
+    			calculateOrderResponse.setOrderId(calculateOrderRequest.getOrderId());
+    			calculateOrderResponse.setPromoCode("YUPROMO10");
+    			calculateOrderResponse.setTotalAmount(orderQuantity * 10);
+    		}
+    	}
+
+        return calculateOrderResponse;
+    }
 }

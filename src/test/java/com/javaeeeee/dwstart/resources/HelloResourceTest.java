@@ -23,14 +23,22 @@
  */
 package com.javaeeeee.dwstart.resources;
 
+import com.javaeeeee.dwstart.core.CalculateOrderRequest;
+import com.javaeeeee.dwstart.core.CalculateOrderResponse;
 import com.javaeeeee.dwstart.core.Greeting;
+
 import io.dropwizard.testing.junit.ResourceTestRule;
+
 import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.Invocation;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+
 import static org.junit.Assert.assertEquals;
+
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -169,5 +177,40 @@ public class HelloResourceTest {
                 .request(MediaType.APPLICATION_JSON)
                 .get(Greeting.class);
         assertEquals(GREETING, actual);
+    }
+    
+   
+    @Test
+    public void testPostOrder10() {
+       
+    	 String expected = "YUPROMO10";
+    	 CalculateOrderRequest calculateOrderRequest = new CalculateOrderRequest();
+    	 calculateOrderRequest.setOrderId("200");
+    	 calculateOrderRequest.setQuantity(110);
+    	 
+    	//Get response
+         CalculateOrderResponse response =  resource.client()
+                 .target("http://localhost:8085/hello")
+                 .request(MediaType.APPLICATION_JSON).post(Entity.entity(calculateOrderRequest,"application/json"), CalculateOrderResponse.class);
+    	 
+        String actual = response.getPromoCode();
+        assertEquals(expected, actual);
+    }
+    
+    @Test
+    public void testPostOrder20() {
+       
+    	 String expected = "YUPROMO20";
+    	 CalculateOrderRequest calculateOrderRequest = new CalculateOrderRequest();
+    	 calculateOrderRequest.setOrderId("100");
+    	 calculateOrderRequest.setQuantity(10);
+    	 
+    	//Get response
+         CalculateOrderResponse response =  resource.client()
+                 .target("http://localhost:8085/hello")
+                 .request(MediaType.APPLICATION_JSON).post(Entity.entity(calculateOrderRequest,"application/json"), CalculateOrderResponse.class);
+    	 
+        String actual = response.getPromoCode();
+        assertEquals(expected, actual);
     }
 }

@@ -1,9 +1,10 @@
 package com.javaeeeee.dwstart;
 
 import io.dropwizard.Configuration;
+
+import javax.validation.constraints.NotNull;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.hibernate.validator.constraints.*;
-import javax.validation.constraints.*;
 
 public class DWGettingStartedConfiguration extends Configuration {
 
@@ -11,7 +12,7 @@ public class DWGettingStartedConfiguration extends Configuration {
      * User login.
      */
     @NotNull
-    private String login;
+    private String login;	
     /**
      * User password.
      */

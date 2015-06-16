@@ -24,16 +24,25 @@
 package com.javaeeeee.dwstart;
 
 import io.dropwizard.testing.junit.DropwizardAppRule;
+
 import javax.net.ssl.SSLContext;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+
 import org.glassfish.jersey.SslConfigurator;
 import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
 import org.junit.Test;
+
 import static org.junit.Assert.*;
+
 import org.junit.ClassRule;
+
+import com.javaeeeee.dwstart.core.CalculateOrderRequest;
+import com.javaeeeee.dwstart.core.CalculateOrderResponse;
+
 
 /**
  * Integration Test for DWGettingStarted application.
@@ -127,5 +136,42 @@ public class IntegrationTest {
         assertEquals(Response.Status.UNAUTHORIZED.getStatusCode(),
                 response.getStatus());
 
+    }
+    
+    
+    @Test
+    public void testCalculateOrder20()  {
+    	
+    	 String expected = "YUPROMO20";
+    	 Client client = ClientBuilder.newClient();
+    	 CalculateOrderRequest calculateOrderRequest = new CalculateOrderRequest();
+    	 calculateOrderRequest.setOrderId("100");
+    	 calculateOrderRequest.setQuantity(20);
+    	//Get response
+        CalculateOrderResponse response =  client
+                .target("http://localhost:8085/hello")
+                .request(MediaType.APPLICATION_JSON).post(Entity.entity(calculateOrderRequest,"application/json"), CalculateOrderResponse.class);
+             
+        String actual = response.getPromoCode();
+        assertEquals(expected, actual);
+       // System.out.println("expected 20  - YUPROMO20 :: " + actual);
+    }
+    
+    @Test
+    public void testCalculateOrder10()  {
+    	
+    	 String expected = "YUPROMO10";
+    	 Client client = ClientBuilder.newClient();
+    	 CalculateOrderRequest calculateOrderRequest = new CalculateOrderRequest();
+    	 calculateOrderRequest.setOrderId("200");
+    	 calculateOrderRequest.setQuantity(110);
+    	//Get response
+        CalculateOrderResponse response =  client
+                .target("http://localhost:8085/hello")
+                .request(MediaType.APPLICATION_JSON).post(Entity.entity(calculateOrderRequest,"application/json"), CalculateOrderResponse.class);
+             
+        String actual = response.getPromoCode();
+        assertEquals(expected, actual);
+       // System.out.println("expected 10  - YUPROMO10 :: " + actual);
     }
 }
